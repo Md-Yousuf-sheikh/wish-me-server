@@ -27,7 +27,7 @@ model User {
   work_status              String?
   role                     String     @default("customer")
   mobile                   String     @unique()
-  password                 String
+  password                 String     @ignore
   email                    String?    @unique()
   profile_image            String?
   is_phone_number_verified Boolean    @default(false)
@@ -36,6 +36,7 @@ model User {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  wishes     Wish[]
 
   @@map("users")
 }
@@ -60,6 +61,10 @@ model Wish {
   message       String
   wish_type     WisheType
   schedule_date String
+
+  
+  user          User      @relation(fields: [user_id], references: [id])
+  user_id       String
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

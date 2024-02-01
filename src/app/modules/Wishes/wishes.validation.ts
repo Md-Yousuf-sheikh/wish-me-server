@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 
-const createWishes = z.object({
+const create = z.object({
   body: z.object({
     receiver_name: z.string({
       required_error: 'Receiver name is required',
@@ -21,6 +21,18 @@ const createWishes = z.object({
   }),
 });
 
+const update = z.object({
+  body: z.object({
+    receiver_name: z.string().optional(),
+    mobile:z.string().optional(),
+    message: z.string().optional(),
+    wish_type:z.string().optional(),
+    schedule_date:z.string().optional(),
+  }),
+});
+
+
 export const WishesValidation = {
-  createWishes,
+  create,
+  update
 };

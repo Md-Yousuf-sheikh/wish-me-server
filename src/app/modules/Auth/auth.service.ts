@@ -26,19 +26,6 @@ const createUser = async (
     where: {
       mobile: userData?.mobile,
     },
-    select: {
-      id: true,
-      full_name: true,
-      profile_image: true,
-      role: true,
-      status: true,
-      work_status: true,
-      is_phone_number_verified: true,
-      mobile: true,
-      email: true,
-      access_token: true,
-      refresh_token: true,
-    },
   });
   //  check is user
   if (isUserExist) {
@@ -55,8 +42,20 @@ const createUser = async (
     data: {
       ...userData,
       password: newPassword,
-      role: 'customer',
       status: 'active',
+    },
+    select: {
+      id: true,
+      full_name: true,
+      profile_image: true,
+      role: true,
+      status: true,
+      work_status: true,
+      is_phone_number_verified: true,
+      mobile: true,
+      email: true,
+      access_token: true,
+      refresh_token: true,
     },
   });
   const { ...userWithoutPassword } = res;
@@ -77,25 +76,25 @@ const createAdmin = async (
     where: {
       mobile: userData?.mobile,
     },
-    select: {
-      full_name: true,
-      mobile: true,
-      profile_image: true,
-      access_token: true,
-      refresh_token: true,
-      role: true,
-      email: true,
-      status: true,
-      id: true,
-      is_phone_number_verified: true,
-      work_status: true,
-    },
   });
   //  check is user
   if (!isUserFound) {
     const newPassword = await isUserPasswordConvertBcrypt(userData?.password);
     const res = await prisma.user.create({
-      data: { ...userData, password: newPassword, role: 'admin' },
+      data: { ...userData, password: newPassword, role:userData?.role?? 'admin' },
+      select: {
+        full_name: true,
+        mobile: true,
+        profile_image: true,
+        access_token: true,
+        refresh_token: true,
+        role: true,
+        email: true,
+        status: true,
+        id: true,
+        is_phone_number_verified: true,
+        work_status: true,
+      },
     });
     const { ...userWithoutPassword } = res;
 

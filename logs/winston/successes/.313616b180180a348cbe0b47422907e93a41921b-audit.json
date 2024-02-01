@@ -34,6 +34,26 @@
             "date": 1706706016577,
             "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-31-01-19-success.log",
             "hash": "1c9b5f9a6db0347e0ab6efe21e9c781b028d0d8d823e02865d7d01d35b2dd475"
+        },
+        {
+            "date": 1706804318350,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-01-02-22-success.log",
+            "hash": "8cd13a6a265d55bb6bf6345462d5aedbaa812561b97575a46c3e4a06f8e4129e"
+        },
+        {
+            "date": 1706813221777,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-02-02-00-success.log",
+            "hash": "861983dc52e5ed7d04013365d5a65ff13047827edc8b9f9069dfc7607ec159d6"
+        },
+        {
+            "date": 1706814669976,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-02-02-01-success.log",
+            "hash": "dbd11bb3c2e3b92a3fa86c8b25f2f0cc8604370fe6ccba09943212070fdbc326"
+        },
+        {
+            "date": 1706817605581,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-02-02-02-success.log",
+            "hash": "4240d21c271041d95df73cda39f2bfb2457cb594e915ef097c713bd712119d7b"
         }
     ],
     "hashType": "sha256"

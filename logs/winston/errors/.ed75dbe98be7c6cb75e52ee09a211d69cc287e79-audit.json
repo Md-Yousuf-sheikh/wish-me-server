@@ -6,34 +6,24 @@
     "auditLog": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\.ed75dbe98be7c6cb75e52ee09a211d69cc287e79-audit.json",
     "files": [
         {
-            "date": 1706688475440,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-14-error.log",
-            "hash": "dfc5df144a216ccf889cd2a7cf143d6c3212ac2c5d8e347fb3c3fb601c4d0a25"
+            "date": 1706804318353,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-01-02-22-error.log",
+            "hash": "7da1476ff6e6315e9b4d3f064ce8c39be6442f12eba96962580f1dd82f765098"
         },
         {
-            "date": 1706692208199,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-15-error.log",
-            "hash": "e2caef9de17a3e5770d71e9cf43b55c6d3650395d570b315f25a369c28cbce47"
+            "date": 1706813221781,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-02-02-00-error.log",
+            "hash": "e63fded332cfb5aa0ddb1b400f7b91395cf7da96b3c1b8e7f2bce64772326e0a"
         },
         {
-            "date": 1706695218155,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-16-error.log",
-            "hash": "be738a99d4f67fc8bfd8d5dd373b6d0c20be660b141715bd9e50a8eaa4088497"
+            "date": 1706814669979,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-02-02-01-error.log",
+            "hash": "70585fc2e5d181a0eadf3bdb97da5b19576668869797de8871519b8d3d59ef33"
         },
         {
-            "date": 1706700161363,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-17-error.log",
-            "hash": "0058dbc18de30ca280bbf5566e0a04abd4ecf2a6e258441ae0ba5c5324756924"
-        },
-        {
-            "date": 1706702426226,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-18-error.log",
-            "hash": "c6efbf5bb7db08400ff81a50ce6d444c3137e1f9523db65aca9be786fa646d38"
-        },
-        {
-            "date": 1706706016580,
-            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-31-01-19-error.log",
-            "hash": "6dfe4aa4e966f5a0ac68912d6fd85fe213fe6b105ebc888d9d433ec7de93b0a1"
+            "date": 1706817605585,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-02-02-02-error.log",
+            "hash": "4dcac4b62e134fcd06897d1c0908b040a2b4d0962b3dffe686102ffee5a53742"
         }
     ],
     "hashType": "sha256"
