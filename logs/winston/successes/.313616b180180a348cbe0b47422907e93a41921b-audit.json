@@ -54,6 +54,16 @@
             "date": 1706817605581,
             "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-02-02-02-success.log",
             "hash": "4240d21c271041d95df73cda39f2bfb2457cb594e915ef097c713bd712119d7b"
+        },
+        {
+            "date": 1706894127322,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-02-02-23-success.log",
+            "hash": "184f0b282f9cb7f07e9c018e738ba546fa4df11d3e64fbbc62ba965487268b54"
+        },
+        {
+            "date": 1706896857156,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-03-02-00-success.log",
+            "hash": "47d9f74021684c2c95015842d2e07c89f99793f029d169003d1aebb243465352"
         }
     ],
     "hashType": "sha256"

@@ -24,6 +24,7 @@ const getAllFormDB = catchAsync(async (req: Request, res: Response) => {
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
 
   const result = await WishesService.getAllFormDB(filters, options);
+
   sendResponse<Wish[]>(res, {
     statusCode: httpStatus.OK,
     success: true,

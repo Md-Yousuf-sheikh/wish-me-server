@@ -24,6 +24,16 @@
             "date": 1706817605585,
             "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-02-02-02-error.log",
             "hash": "4dcac4b62e134fcd06897d1c0908b040a2b4d0962b3dffe686102ffee5a53742"
+        },
+        {
+            "date": 1706894127327,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-02-02-23-error.log",
+            "hash": "4df03683e505889d293f6437f59b4886cf0f02673c5890b212f93919375cbaf5"
+        },
+        {
+            "date": 1706896857159,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-03-02-00-error.log",
+            "hash": "54c18803d99c7d08630be08aa122d3475a6b7aa3b8b43999326f0620cca37287"
         }
     ],
     "hashType": "sha256"

@@ -27,7 +27,7 @@ model User {
   work_status              String?
   role                     String     @default("customer")
   mobile                   String     @unique()
-  password                 String     @ignore
+  password                 String     
   email                    String?    @unique()
   profile_image            String?
   is_phone_number_verified Boolean    @default(false)

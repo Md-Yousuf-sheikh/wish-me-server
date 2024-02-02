@@ -1,28 +1,13 @@
 import { z } from 'zod';
 
-const createUser = z.object({
+const updateUser = z.object({
   body: z.object({
-    mobile: z.string({
-      required_error: 'Mobile number is required',
-    }),
-    password: z.string({
-      required_error: 'Password is required',
-    }),
-  }),
-});
-
-const loginUser = z.object({
-  body: z.object({
-    mobile: z.string({
-      required_error: 'Mobile number is required',
-    }),
-    password: z.string({
-      required_error: 'Password is required',
-    }),
+    full_name: z.string().optional(),
+    profile_image: z.string().optional(),
+    work_status: z.string().optional(),
   }),
 });
 
 export const UserValidation = {
-  createUser,
-  loginUser,
+  updateUser
 };

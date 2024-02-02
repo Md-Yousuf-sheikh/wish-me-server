@@ -1,23 +1,27 @@
-// import { User } from '@prisma/client';
-// import { NextFunction, Request, Response } from 'express';
-// import sendResponse, { IApiResponse } from '../../../shared/sendResponse';
-// import { UserService } from './user.service';
+import { User } from '@prisma/client';
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import sendResponse from '../../../shared/sendResponse';
+import { UserService } from './user.service';
 
-// const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const result = await UserService.loginUser(req?.body) as unknown as IApiResponse<Partial<User>>
-//     sendResponse<Partial<User>>(res, {
-//       statusCode: result?.statusCode,
-//       success: result?.success,
-//       message: result?.message,
-//       data: result?.data,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+// update user
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+  const payload = req?.body;
+  const id = req?.params?.id;
 
+  try {
+    const result = await UserService.updateUser(id, payload);
+    sendResponse<Partial<User>>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Update information successfully!',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-// export const UserController = {
-//   loginUser,
-// };
+export const UserController = {
+  updateUser,
+};

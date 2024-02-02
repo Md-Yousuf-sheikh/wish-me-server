@@ -1,5 +1,6 @@
 import { Prisma, Wish } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
 import { WishesSearchAbleFields } from './wishes.constant';
@@ -35,8 +36,8 @@ const deleteFormDB = async (id: string): Promise<Wish> => {
 const getAllFormDB = async (
   filters: IWishesFilterRequest,
   options: IPaginationOptions
-): Promise<Wish[]> => {
-  const { limit, skip } = paginationHelpers.calculatePagination(options);
+): Promise<IGenericResponse<Wish[]>> => {
+  const { limit, skip, page } = paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
   const andConditions = [];
 
@@ -81,7 +82,20 @@ const getAllFormDB = async (
       },
     },
   });
-  return res;
+
+  //  get total
+  const total = await prisma?.wish.count({
+    where: whereConditions,
+  });
+
+  return {
+    meta: {
+      limit,
+      page,
+      total,
+    },
+    data: res,
+  };
 };
 //  getById
 const getByIdFormDB = async (id: string): Promise<Partial<Wish> | null> => {

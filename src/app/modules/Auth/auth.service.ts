@@ -3,6 +3,7 @@ import { Secret } from 'jsonwebtoken';
 
 import httpStatus from 'http-status';
 import config from '../../../config';
+import ApiError from '../../../errors/ApiError';
 import {
   isCurrentTimeMatch,
   isExpireTime,
@@ -15,26 +16,18 @@ import {
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { SEND_SMS } from '../../../helpers/smsSender';
 import prisma from '../../../shared/prisma';
-import { IApiResponse } from '../../../shared/sendResponse';
 import { IVerifyOtpProps } from './auth.interface';
 
 //  create user
-const createUser = async (
-  userData: User
-): Promise<IApiResponse<Partial<User>>> => {
-  const isUserExist = await prisma.user.findUnique({
+const createUser = async (userData: User): Promise<Partial<User>> => {
+  const isUserExists = await prisma.user.findUnique({
     where: {
       mobile: userData?.mobile,
     },
   });
-  //  check is user
-  if (isUserExist) {
-    return {
-      data: null,
-      success: true,
-      statusCode: httpStatus.NOT_FOUND,
-      message: `User with mobile already exists.`,
-    };
+
+  if (isUserExists) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Mobile number already exists');
   }
 
   const newPassword = await isUserPasswordConvertBcrypt(userData?.password);
@@ -42,135 +35,106 @@ const createUser = async (
     data: {
       ...userData,
       password: newPassword,
-      status: 'active',
+      role: userData?.role ?? 'customer',
     },
     select: {
-      id: true,
       full_name: true,
-      profile_image: true,
-      role: true,
-      status: true,
-      work_status: true,
-      is_phone_number_verified: true,
       mobile: true,
-      email: true,
+      profile_image: true,
       access_token: true,
       refresh_token: true,
+      role: true,
+      email: true,
+      status: true,
+      id: true,
+      is_phone_number_verified: true,
+      work_status: true,
     },
   });
   const { ...userWithoutPassword } = res;
 
-  return {
-    data: userWithoutPassword,
-    success: true,
-    statusCode: httpStatus.OK,
-    message: `Create user ${userWithoutPassword.full_name} successfully!`,
-  };
+  return userWithoutPassword;
+
   // end
 };
-//  create user
-const createAdmin = async (
-  userData: User
-): Promise<IApiResponse<Partial<User>>> => {
-  const isUserFound = await prisma.user.findUnique({
+//  create admin
+const createAdmin = async (userData: User): Promise<Partial<User>> => {
+  const isUserExists = await prisma.user.findUnique({
     where: {
       mobile: userData?.mobile,
     },
   });
-  //  check is user
-  if (!isUserFound) {
-    const newPassword = await isUserPasswordConvertBcrypt(userData?.password);
-    const res = await prisma.user.create({
-      data: { ...userData, password: newPassword, role:userData?.role?? 'admin' },
-      select: {
-        full_name: true,
-        mobile: true,
-        profile_image: true,
-        access_token: true,
-        refresh_token: true,
-        role: true,
-        email: true,
-        status: true,
-        id: true,
-        is_phone_number_verified: true,
-        work_status: true,
-      },
-    });
-    const { ...userWithoutPassword } = res;
 
-    return {
-      data: userWithoutPassword,
-      success: true,
-      statusCode: httpStatus.OK,
-      message: `Create user ${userWithoutPassword.full_name} successfully!`,
-    };
-  } else {
-    return {
-      data: null,
-      success: true,
-      statusCode: httpStatus.NOT_FOUND,
-      message: `User with mobile already exists.`,
-    };
+  if (isUserExists) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Mobile number already exists');
   }
+
+  const newPassword = await isUserPasswordConvertBcrypt(userData?.password);
+  const res = await prisma.user.create({
+    data: {
+      ...userData,
+      password: newPassword,
+      role: userData?.role ?? 'admin',
+    },
+    select: {
+      full_name: true,
+      mobile: true,
+      profile_image: true,
+      access_token: true,
+      refresh_token: true,
+      role: true,
+      email: true,
+      status: true,
+      id: true,
+      is_phone_number_verified: true,
+      work_status: true,
+    },
+  });
+  const { ...userWithoutPassword } = res;
+
+  return userWithoutPassword;
 
   // end
 };
+
 // login user
-const loginUser = async (props: User): Promise<IApiResponse<Partial<User>>> => {
+const loginUser = async (props: User): Promise<Partial<User>> => {
   const res = await prisma.user.findUnique({
     where: {
       mobile: props?.mobile,
     },
   });
 
-  if (res) {
-    const { mobile, role, password, ...responseData } = res;
-    // check password
-    const isMatchPassword = await isUserPasswordMatch(
-      props?.password,
-      password
-    );
-    // send
-    if (isMatchPassword) {
-      // access Token
-      const accessToken = jwtHelpers.createToken(
-        { mobile, role },
-        config.jwt.secret as Secret,
-        config.jwt.expires_in as string
-      );
-      // refresh Token
-      const refreshToken = jwtHelpers.createToken(
-        { mobile, role },
-        config.jwt.refresh_secret as Secret,
-        config.jwt.refresh_expires_in as string
-      );
-
-      return {
-        message: 'Login successfully',
-        statusCode: httpStatus.OK,
-        success: true,
-        data: {
-          ...responseData,
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        },
-      };
-    } else {
-      return {
-        message: 'Password is incorrect!',
-        success: false,
-        statusCode: httpStatus.NOT_FOUND,
-        data: null,
-      };
-    }
-  } else {
-    return {
-      data: null,
-      message: 'Number is incorrect!',
-      success: false,
-      statusCode: httpStatus.NOT_FOUND,
-    };
+  if (!res) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Mobile number not found');
   }
+
+  const { mobile, role, password, ...responseData } = res;
+  // check password
+  const isMatchPassword = await isUserPasswordMatch(props?.password, password);
+
+  if (!isMatchPassword) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Password does not match');
+  }
+
+  // access Token
+  const accessToken = jwtHelpers.createToken(
+    { mobile, role },
+    config.jwt.secret as Secret,
+    config.jwt.expires_in as string
+  );
+  // refresh Token
+  const refreshToken = jwtHelpers.createToken(
+    { mobile, role },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_expires_in as string
+  );
+
+  return {
+    ...responseData,
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  };
 };
 //  send otp
 const sendOtp = async (props: SendNumberOtp) => {
@@ -192,16 +156,11 @@ const sendOtp = async (props: SendNumberOtp) => {
   const smsMessage = `Wish Me: Your OTP is ${data.otp}. Use it to verify you phone  number. Expire in 2 minutes.`;
   await SEND_SMS(data.mobile, smsMessage);
 
-  return {
-    data: res,
-    message: 'Check  your sms for the OTP',
-    success: true,
-    statusCode: httpStatus.OK,
-  };
+  return res;
 };
 // verifyOtp
 const verifyOtp = async (props: IVerifyOtpProps) => {
-  // database
+  // check number is ex
   const res = await prisma.sendNumberOtp.findFirst({
     where: {
       mobile: props?.mobile,
@@ -210,43 +169,28 @@ const verifyOtp = async (props: IVerifyOtpProps) => {
       updated_at: 'desc',
     },
   });
+  // mobile number not found
+  if (!res) throw new ApiError(httpStatus.NOT_FOUND, 'Mobile number not found');
 
-  if (res) {
-    const isTimerExpire = isCurrentTimeMatch(res?.expire_time);
+  //  check otp match or not
+  if (Number(res?.otp) !== Number(props?.otp))
+    throw new ApiError(httpStatus.NOT_FOUND, "Otp doesn't match!");
 
-    if (
-      res?.mobile === props?.mobile &&
-      Number(res?.otp) === Number(props?.otp) &&
-      isTimerExpire
-    ) {
-      //  delete otp
-      await prisma.sendNumberOtp.delete({
-        where: {
-          id: res?.id,
-        },
-      });
+  //  check otp expire time  or not
+  const isTimeNotExpire = isCurrentTimeMatch(res?.expire_time);
 
-      return {
-        data: {
-          module: res?.mobile,
-        },
-        message: 'Number Verification Successfully',
-        statusCode: httpStatus.OK,
-        success: true,
-      };
-    } else {
-      return {
-        message: "Otp doesn't match",
-        statusCode: httpStatus.NOT_FOUND,
-        success: false,
-      };
-    }
-  } else {
-    return {
-      data: null,
-      message: 'Mobile number not match',
-    };
-  }
+  if (!isTimeNotExpire)
+    throw new ApiError(httpStatus.NOT_FOUND, 'Expire otp time!');
+
+  await prisma.sendNumberOtp.deleteMany({
+    where: {
+      mobile: res?.mobile,
+    },
+  });
+
+  return {
+    module: res?.mobile,
+  };
 };
 //  forget password
 const forgetPassword = async (props: SendNumberOtp) => {
@@ -257,19 +201,10 @@ const forgetPassword = async (props: SendNumberOtp) => {
   });
 
   if (!isUserExist) {
-    return {
-      message: 'User not found',
-      success: false,
-      statusCode: httpStatus.NOT_FOUND,
-    };
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not  Found!');
   }
-
   if (isUserExist?.status === 'inactive') {
-    return {
-      message: 'Your account is inactive.',
-      success: false,
-      statusCode: httpStatus.NOT_FOUND,
-    };
+    throw new ApiError(httpStatus.NOT_FOUND, 'User is  InActive!');
   }
 
   //
@@ -291,17 +226,10 @@ const forgetPassword = async (props: SendNumberOtp) => {
   await SEND_SMS(data.mobile, smsMessage);
 
   // return
-  return {
-    data: res,
-    message: 'Check  your sms for the OTP',
-    success: true,
-    statusCode: httpStatus.OK,
-  };
+  return res;
 };
 //  reset password
-const resetPassword = async (
-  props: User
-): Promise<IApiResponse<Partial<User>>> => {
+const resetPassword = async (props: User): Promise<Partial<User>> => {
   const isUserExist = await prisma.user.findUnique({
     where: {
       mobile: props?.mobile,
@@ -313,12 +241,7 @@ const resetPassword = async (
   });
   //  check is user
   if (!isUserExist) {
-    return {
-      data: null,
-      success: true,
-      statusCode: httpStatus.NOT_FOUND,
-      message: `User not exists.`,
-    };
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not  Found!');
   }
 
   const newPassword = await isUserPasswordConvertBcrypt(props?.password);
@@ -331,44 +254,29 @@ const resetPassword = async (
       password: newPassword,
     },
   });
-
-  console.log('res', res);
-
-  return {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: `Reset password successfully!`,
-  };
+  return res;
   // end
 };
 // update user
-//  create user
 const updateUser = async (
-  props: Partial<User>
-): Promise<IApiResponse<Partial<User>>> => {
-
-  const body = {
-    full_name: props?.full_name,
-    profile_image: props?.profile_image,
-    work_status: props?.work_status,
-  };
-
+  id: string,
+  payload: Partial<User>
+): Promise<Partial<User>> => {
   const res = await prisma.user.update({
     where: {
-      mobile: body?.mobile,
+      id: id,
     },
-    data: body,
+    data: {
+      full_name: payload?.full_name,
+      profile_image: payload?.profile_image,
+      work_status: payload?.work_status,
+    },
   });
-  const { ...userWithoutPassword } = res;
 
-  return {
-    data: userWithoutPassword,
-    success: true,
-    statusCode: httpStatus.OK,
-    message: `Update user  successfully!`,
-  };
+  return res;
   // end
 };
+
 // export
 export const AuthService = {
   createUser,

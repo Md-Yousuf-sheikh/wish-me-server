@@ -15,11 +15,6 @@ router.post(
   AuthController.createUser
 );
 router.post(
-  '/profile-update',
-  validateRequest(AuthValidation.updateUser),
-  AuthController.updateUser
-);
-router.post(
   '/login',
   validateRequest(AuthValidation.loginUser),
   AuthController.loginUser
