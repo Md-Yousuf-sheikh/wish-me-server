@@ -101,9 +101,16 @@ const getAllFormDB = async (
 const getByIdFormDB = async (id: string): Promise<Partial<Wish> | null> => {
   const res = await prisma.wish.findUnique({
     where: {
-      id,
+      id: id,
     },
   });
+
+  // if (!res) {
+  //   theroNew
+  // }
+
+  console.log('res', res);
+
   return res;
 };
 

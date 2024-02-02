@@ -34,6 +34,11 @@
             "date": 1706896857159,
             "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-03-02-00-error.log",
             "hash": "54c18803d99c7d08630be08aa122d3475a6b7aa3b8b43999326f0620cca37287"
+        },
+        {
+            "date": 1706901566173,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\errors\\phu-2024-03-02-01-error.log",
+            "hash": "d6bdb144241d3a195da659d2b47e30574dc03a59a7384649410ac6a85a6f5742"
         }
     ],
     "hashType": "sha256"
