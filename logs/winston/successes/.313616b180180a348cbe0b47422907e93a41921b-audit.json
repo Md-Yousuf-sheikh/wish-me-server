@@ -69,6 +69,11 @@
             "date": 1706901566170,
             "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-03-02-01-success.log",
             "hash": "a08ff63ef3fabd7d1bfacc8488ca7a27929af87baac3d326c96c5cee16bc65ff"
+        },
+        {
+            "date": 1707119770666,
+            "name": "D:\\BTL\\wish-me-server\\logs\\winston\\successes\\phu-2024-05-02-13-success.log",
+            "hash": "5791115bcd7f7919d9c4988c930a6137b5c0cb09b0b38cf917d790caf64b31bc"
         }
     ],
     "hashType": "sha256"
